@@ -147,7 +147,7 @@ MIT
  5. For backend, ensure `Procfile` is present.
 
  ## Environment Variables
- - Store secrets (e.g., Azure credentials) in Railway's environment settings.
+ - Store secrets (e.g., Azure credentials) in Railway's environment settings
 
  ## License
  MIT
