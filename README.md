@@ -1,43 +1,102 @@
 # ShareExpress
 
- A full-stack application with a Python backend and a Next.js frontend for sharing files and short links.
+ShareExpress is a full-stack web application for secure file sharing and short link management. It features a Python FastAPI backend and a Next.js frontend.
 
- ## Project Structure
+## Project Structure
 
- - `backend/` — Python FastAPI backend
- - `frontend/` — Next.js frontend
-
-# ShareExpress
-
-ShareExpress is a full-stack web application for secure file sharing and short link management. It features a Python backend and a Next.js frontend, designed for easy deployment on Railway.
-
- ## Backend
-- Upload files securely and generate shareable links
-- Create and manage short links for files or URLs
-- Modern, responsive UI built with Next.js and Tailwind CSS
-- Azure Blob Storage integration for scalable file storage
-- RESTful API for backend operations
-- Environment variable support for secrets and configuration
-
- - Written in Python
-- Python (FastAPI)
-- Next.js (React, TypeScript)
-- Azure Blob Storage
-- Railway (deployment)
-- Tailwind CSS
-
- - Handles file uploads and short link generation
 - `backend/` — Python FastAPI backend
 - `frontend/` — Next.js frontend
 
- - Requirements listed in `backend/requirements.txt`
-- Handles file uploads, short link generation, and API endpoints
+## Backend (FastAPI)
+
+- Handles file uploads and short link generation
+- RESTful API endpoints
+- Azure Blob Storage integration
 - Requirements listed in `backend/requirements.txt`
 - Entry point: `backend/main.py`
-- Deployment: `backend/Procfile`
+- Deployment: `backend/Procfile` (Railway/Heroku) and `render.yaml` (Render)
 
- - Entry point: `backend/main.py`
- - Procfile for Railway/Heroku deployment
+## Frontend (Next.js)
+
+- Modern, responsive UI built with Next.js and Tailwind CSS
+- Connects to backend API
+- Deployment: Vercel
+
+---
+
+## Deployment Instructions
+
+### Backend on Render
+
+1. Sign up at [Render](https://render.com) and create a new Web Service.
+2. Connect your GitHub repo or upload your backend files.
+3. Render auto-detects Python projects. Ensure your `requirements.txt` and `Procfile` are present.
+4. (Optional) Add a `render.yaml` for advanced config.
+5. Set environment variables (e.g., `AZURE_STORAGE_CONNECTION_STRING`).
+6. Render will build and deploy your backend. You’ll get a public API URL.
+
+### Backend on Railway
+
+1. Sign up at [Railway](https://railway.app) and create a new project.
+2. Connect your GitHub repo or upload your backend files.
+3. Ensure your `requirements.txt` and `Procfile` are present.
+4. Set environment variables (e.g., `AZURE_STORAGE_CONNECTION_STRING`).
+5. Railway will build and deploy your backend. You’ll get a public API URL.
+
+### Frontend on Vercel
+
+1. Sign up at [Vercel](https://vercel.com) and create a new project.
+2. Connect your GitHub repo and select the `frontend/` directory.
+3. Vercel auto-detects Next.js projects. No config needed, but you can add a `vercel.json` for custom settings.
+4. Set environment variables (e.g., `NEXT_PUBLIC_API_URL` to your backend URL).
+5. Vercel will build and deploy your frontend. You’ll get a public URL.
+
+---
+
+## Environment Variables
+
+### Backend
+- `AZURE_STORAGE_CONNECTION_STRING`: Azure Blob Storage connection string
+- `OTHER_SECRET`: Any other secrets required
+
+### Frontend
+- `NEXT_PUBLIC_API_URL`: URL of your deployed backend
+
+---
+
+## Example Files
+
+- `backend/Procfile`:
+	```
+	web: uvicorn main:app --host 0.0.0.0 --port $PORT
+	```
+- `backend/render.yaml`:
+	```yaml
+	services:
+		- type: web
+			name: shareexpress-backend
+			env: python
+			buildCommand: "pip install -r requirements.txt"
+			startCommand: "uvicorn main:app --host 0.0.0.0 --port $PORT"
+			autoDeploy: true
+			envVars:
+				- key: AZURE_STORAGE_CONNECTION_STRING
+					sync: false
+				- key: OTHER_SECRET
+					sync: false
+	```
+- `frontend/vercel.json`:
+	```json
+	{
+		"version": 2,
+		"builds": [
+			{ "src": "next.config.ts", "use": "@vercel/next" }
+		],
+		"env": {
+			"NEXT_PUBLIC_API_URL": "https://your-backend-url.onrender.com"
+		}
+	}
+	```
 
  ### Running Locally
  ```bash
